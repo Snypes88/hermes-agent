@@ -17,6 +17,7 @@ import { type Translations, useI18n } from '@/i18n'
 import { AlertTriangle, ExternalLink, Save, Trash2 } from '@/lib/icons'
 import { cn } from '@/lib/utils'
 import { notify, notifyError } from '@/store/notifications'
+import { runGatewayRestart } from '@/store/system-actions'
 
 import { useRefreshHotkey } from '../hooks/use-refresh-hotkey'
 import { useRouteEnumParam } from '../hooks/use-route-enum-param'
@@ -197,7 +198,8 @@ export function MessagingView({ setStatusbarItemGroup: _setStatusbarItemGroup, .
       notify({
         kind: 'success',
         title: enabled ? m.platformEnabled(platform.name) : m.platformDisabled(platform.name),
-        message: m.restartToApply
+        message: m.restartToApply,
+        action: { label: t.commandCenter.restartGateway, onClick: () => void runGatewayRestart() }
       })
     } catch (err) {
       notifyError(err, m.failedUpdate(platform.name))
@@ -222,7 +224,8 @@ export function MessagingView({ setStatusbarItemGroup: _setStatusbarItemGroup, .
       notify({
         kind: 'success',
         title: m.setupSaved(platform.name),
-        message: m.restartToReconnect
+        message: m.restartToReconnect,
+        action: { label: t.commandCenter.restartGateway, onClick: () => void runGatewayRestart() }
       })
     } catch (err) {
       notifyError(err, m.failedSave(platform.name))
